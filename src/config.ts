@@ -95,6 +95,7 @@ class DiscordBridgeConfigBridge {
     public disableJoinLeaveNotifications: boolean = false;
     public disableInviteNotifications: boolean = false;
     public determineCodeLanguage: boolean = false;
+    public userBlacklist: string[] = [];
 }
 
 export class DiscordBridgeConfigDatabase {

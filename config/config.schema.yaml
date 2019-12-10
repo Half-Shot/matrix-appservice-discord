@@ -28,6 +28,10 @@ properties:
             type: "boolean"
           disableInviteNotifications:
             type: "boolean"
+          userBlacklist:
+            type: "array"
+            items:
+              type: "string"
     auth:
         type: "object"
         required: ["botToken", "clientID"]

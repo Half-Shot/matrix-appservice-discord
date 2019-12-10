@@ -138,6 +138,10 @@ export class MatrixEventProcessor {
             return;
         } else if (event.type === "m.room.message" || event.type === "m.sticker") {
             log.verbose(`Got ${event.type} event`);
+            if (this.config.bridge.userBlacklist.includes(event.sender)) {
+                log.verbose(`Ignoring blacklisted user ${event.sender}`);
+                return;
+            }
             if (isBotCommand(event)) {
                 await this.mxCommandHandler.Process(event, remoteRoom);
             } else if (remoteRoom) {
