@@ -133,15 +133,17 @@ export class MatrixEventProcessor {
         } else if (["m.room.member", "m.room.name", "m.room.topic"].includes(event.type)) {
             await this.ProcessStateEvent(event);
             return;
+        } else if (event.type === "m.room.encryption" && remoteRoom) {
+            await this.HandleEncryptionWarning(event.room_id);
+            return;
+        } else if (this.config.bridge.userBlacklist.includes(event.sender)) {
+            log.verbose(`Ignoring blacklisted user ${event.sender}`);
+            return;
         } else if (event.type === "m.room.redaction" && remoteRoom) {
             await this.discord.ProcessMatrixRedact(event);
             return;
         } else if (event.type === "m.room.message" || event.type === "m.sticker") {
             log.verbose(`Got ${event.type} event`);
-            if (this.config.bridge.userBlacklist.includes(event.sender)) {
-                log.verbose(`Ignoring blacklisted user ${event.sender}`);
-                return;
-            }
             if (isBotCommand(event)) {
                 await this.mxCommandHandler.Process(event, remoteRoom);
             } else if (remoteRoom) {
@@ -151,9 +153,6 @@ export class MatrixEventProcessor {
                     log.warn("There was an error sending a matrix event", err);
                 }
             }
-            return;
-        } else if (event.type === "m.room.encryption" && remoteRoom) {
-            await this.HandleEncryptionWarning(event.room_id);
             return;
         }
         // throw new Unstable.EventUnknownError(`${event.event_id} not processed by bridge`);
@@ -282,8 +281,12 @@ export class MatrixEventProcessor {
         }
 
         msg += " on Matrix.";
-        const channel = await this.discord.GetChannelFromRoomId(event.room_id) as Discord.TextChannel;
-        await this.discord.sendAsBot(msg, channel, event);
+        if (!this.config.bridge.userBlacklist.includes(event.sender)) {
+            const channel = await this.discord.GetChannelFromRoomId(event.room_id) as Discord.TextChannel;
+            await this.discord.sendAsBot(msg, channel, event);
+        } else {
+            log.info(`Not posting state event message for blacklisted user ${event.sender}. Would have said: "${msg}"`);
+        }
         await this.sendReadReceipt(event);
     }
 
