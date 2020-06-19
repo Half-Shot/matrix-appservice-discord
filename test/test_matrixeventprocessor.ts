@@ -185,7 +185,7 @@ function createMatrixEventProcessor(storeMockResults = 0) {
     const config = new DiscordBridgeConfig();
     config.applyConfig({
         bridge: {
-            userBlacklist: ["@test_blacklisted_user:localhost", ".*:blacklisted_server", "o"],
+            userBlacklist: ["^@test_blacklisted_user:localhost$", ".*:blacklisted_server"],
         },
     });
 
