@@ -130,14 +130,17 @@ export class MatrixEventProcessor {
         } else if (this.bridge.isNamespacedUser(event.sender)) {
             // Ignore echo
             return;
-        } else if (["m.room.member", "m.room.name", "m.room.topic"].includes(event.type)) {
-            await this.ProcessStateEvent(event);
-            return;
         } else if (event.type === "m.room.encryption" && remoteRoom) {
             await this.HandleEncryptionWarning(event.room_id);
             return;
-        } else if (this.config.bridge.userBlacklist.includes(event.sender)) {
-            log.verbose(`Ignoring blacklisted user ${event.sender}`);
+        } else if (this.config.bridge.IsUserBlacklisted(event.sender)) {
+            log.verbose(`${event.event_id} ${event.type} is by blacklisted user ${event.sender}, ignoring.`);
+            return;
+        } else if (this.config.bridge.IsUserBlacklisted(event.state_key)) {
+            log.verbose(`${event.event_id} ${event.type} pertains to blacklisted user ${event.state_key}, ignoring.`);
+            return;
+        } else if (["m.room.member", "m.room.name", "m.room.topic"].includes(event.type)) {
+            await this.ProcessStateEvent(event);
             return;
         } else if (event.type === "m.room.redaction" && remoteRoom) {
             await this.discord.ProcessMatrixRedact(event);
@@ -185,6 +188,11 @@ export class MatrixEventProcessor {
      * @throws {Unstable.ForeignNetworkError}
      */
     public async ProcessMsgEvent(event: IMatrixEvent, room: RemoteStoreRoom): Promise<void> {
+        if (this.config.bridge.IsUserBlacklisted(event.sender)) {
+            log.verbose(`Message ${event.event_id} is by blacklisted user ${event.sender}, ignoring.`);
+            return;
+        }
+
         const guildId = room.data.discord_guild!;
         const channelId = room.data.discord_channel!;
         const mxClient = this.bridge.botClient;
@@ -237,6 +245,14 @@ export class MatrixEventProcessor {
             log.verbose(`${event.event_id} ${event.type} is by our bot user, ignoring.`);
             return;
         }
+        if (this.config.bridge.IsUserBlacklisted(event.sender)) {
+            log.verbose(`${event.event_id} ${event.type} is by blacklisted user ${event.sender}, ignoring.`);
+            return;
+        }
+        if (this.config.bridge.IsUserBlacklisted(event.state_key)) {
+            log.verbose(`${event.event_id} ${event.type} pertains to blacklisted user ${event.state_key}, ignoring.`);
+            return;
+        }
 
         let msg = `\`${event.sender}\` `;
 
@@ -281,12 +297,8 @@ export class MatrixEventProcessor {
         }
 
         msg += " on Matrix.";
-        if (!this.config.bridge.userBlacklist.includes(event.sender)) {
-            const channel = await this.discord.GetChannelFromRoomId(event.room_id) as Discord.TextChannel;
-            await this.discord.sendAsBot(msg, channel, event);
-        } else {
-            log.info(`Not posting state event message for blacklisted user ${event.sender}. Would have said: "${msg}"`);
-        }
+        const channel = await this.discord.GetChannelFromRoomId(event.room_id) as Discord.TextChannel;
+        await this.discord.sendAsBot(msg, channel, event);
         await this.sendReadReceipt(event);
     }
 

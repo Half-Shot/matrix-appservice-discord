@@ -554,6 +554,10 @@ export class DiscordBot {
         if (this.config.bridge.disableDeletionForwarding) {
             return;
         }
+        if (this.config.bridge.IsUserBlacklisted(event.sender)) {
+            log.verbose(`Redact request for ${event.redacts} is from blacklisted user ${event.sender}, ignoring.`);
+            return;
+        }
         log.info(`Got redact request for ${event.redacts}`);
         log.verbose(`Event:`, event);
 

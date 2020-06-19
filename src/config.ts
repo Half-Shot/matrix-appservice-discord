@@ -96,6 +96,10 @@ class DiscordBridgeConfigBridge {
     public disableInviteNotifications: boolean = false;
     public determineCodeLanguage: boolean = false;
     public userBlacklist: string[] = [];
+
+    public IsUserBlacklisted(userId: string): boolean {
+        return !!userId && this.userBlacklist.some(regex => userId.match(`^${regex}$`));
+    }
 }
 
 export class DiscordBridgeConfigDatabase {
