@@ -1077,8 +1077,8 @@ This is the reply`,
                 processed = true;
             };
             await processor.OnEvent(buildRequest({
-                sender: "@test_blacklisted_user:localhost",
                 content: {body: "abc"},
+                sender: "@test_blacklisted_user:localhost",
                 type: "m.room.message",
             }), context);
             expect(MESSAGE_PROCCESS).to.equal("");
@@ -1116,8 +1116,8 @@ This is the reply`,
         it("should ignore !discord commands sent by blacklisted user", async () => {
             const {processor} =  createMatrixEventProcessor();
             await processor.OnEvent(buildRequest({
-                sender: "@test_blacklisted_user:localhost",
                 content: {body: "!discord cmd"},
+                sender: "@test_blacklisted_user:localhost",
                 type: "m.room.message",
             }), []);
             expect(MESSAGE_PROCCESS).to.equal("");

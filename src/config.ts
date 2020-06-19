@@ -98,7 +98,7 @@ class DiscordBridgeConfigBridge {
     public userBlacklist: string[] = [];
 
     public IsUserBlacklisted(userId: string): boolean {
-        return !!userId && this.userBlacklist.some(regex => userId.match(`^${regex}$`));
+        return !!userId && this.userBlacklist.some((regex) => userId.match(`^${regex}$`));
     }
 }
 
