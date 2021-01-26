@@ -42,6 +42,19 @@ const JOIN_ROOM_SCHEDULE = [
     900000,         // 15 minutes
 ];
 
+export interface ICreationOptions {
+    __roomId: string;
+    initial_state: {
+        content: {
+            join_rule: string,
+        },
+        state_key: string,
+        type: string,
+    }[];
+    room_alias_name: string;
+    visibility: string;
+}
+
 export class MatrixRoomHandler {
     private botUserId: string;
     constructor(
@@ -52,21 +65,22 @@ export class MatrixRoomHandler {
         this.botUserId = this.discord.BotUserId;
     }
 
-    public bindThirdparty() {
+    public bindThirdparty(): void {
         this.bridge.on("thirdparty.protocol",
             (protocol: string, cb: (protocolResponse: IApplicationServiceProtocol) => void) => {
                 this.tpGetProtocol(protocol)
                     .then(cb)
-                    .catch((err) => log.warn("Failed to get protocol", err));
+                    .catch((err: Error) => log.warn("Failed to get protocol", err));
             }
         );
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        this.bridge.on("thirdparty.location.remote", (protocol: string, fields: any, cb: (response: any) => void) => {
-            this.tpGetLocation(protocol, fields)
-                .then(cb)
-                .catch((err) => log.warn("Failed to get remote locations", err));
-        });
+        this.bridge.on("thirdparty.location.remote",
+            (protocol: string, fields: unknown, cb: (response: IThirdPartyLookup[]) => void) => {
+                this.tpGetLocation(protocol, fields)
+                    .then(cb)
+                    .catch((err: Error) => log.warn("Failed to get remote locations", err));
+            },
+        );
 
         // These are not supported.
         this.bridge.on("thirdparty.location.matrix", (matrixId: string, cb: (response: null) => void) => {
@@ -108,7 +122,7 @@ export class MatrixRoomHandler {
             channel.guild.id,
             roomId,
             "public",
-        ).catch((err) => {
+        ).catch((err: Error) => {
             log.warn("Failed to set room directory visibility for new room:", err);
         });
         await this.discord.ChannelSyncroniser.OnUpdate(channel);
@@ -138,8 +152,7 @@ export class MatrixRoomHandler {
         await Promise.all(promiseList);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    public async OnAliasQuery(alias: string): Promise<any> {
+    public async OnAliasQuery(alias: string): Promise<ICreationOptions | undefined> {
         const aliasLocalpart = alias.substring("#".length, alias.indexOf(":"));
         log.info("Got request for #", aliasLocalpart);
         const srvChanPair = aliasLocalpart.substring("_discord_".length).split("_", ROOM_NAME_PARTS);
@@ -252,7 +265,7 @@ export class MatrixRoomHandler {
         channel: Discord.TextChannel,
         alias: string,
         aliasLocalpart: string
-    ) {
+    ): Promise<ICreationOptions> {
         const remote = new RemoteStoreRoom(`discord_${channel.guild.id}_${channel.id}`, {
             /* eslint-disable @typescript-eslint/camelcase */
             discord_channel: channel.id,
@@ -263,7 +276,7 @@ export class MatrixRoomHandler {
             update_topic: 1,
             /* eslint-enable @typescript-eslint/camelcase */
         });
-        const creationOpts = {
+        const creationOpts: ICreationOptions = {
             /* eslint-disable @typescript-eslint/camelcase */
             initial_state: [
                 {
@@ -278,7 +291,7 @@ export class MatrixRoomHandler {
             visibility: this.config.room.defaultVisibility,
             /* eslint-enable @typescript-eslint/camelcase */
         };
-        // We need to tempoarily store this until we know the room_id.
+        // We need to temporarily store this until we know the room_id.
         await this.roomStore.linkRooms(
             new MatrixStoreRoom(alias),
             remote,
