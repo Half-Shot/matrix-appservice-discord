@@ -328,7 +328,6 @@ describe("UserSyncroniser", () => {
             bridge.getIntentForUserId("@_discord_123456:localhost").underlyingClient.wasCalled(
                 "sendStateEvent", true, "!abc:localhost",
                 "m.room.member", "@_discord_123456:localhost", {
-                    "avatar_url": "",
                     "displayname": "Good Boy",
                     "membership": "join",
                     "uk.half-shot.discord.member": {

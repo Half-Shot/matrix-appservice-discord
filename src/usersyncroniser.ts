@@ -200,9 +200,9 @@ export class UserSyncroniser {
             return;
         }
         const remoteUser = await this.userStore.getRemoteUser(memberState.id);
-        let avatar = "";
+        let avatar: string|undefined;
         if (remoteUser) {
-            avatar = remoteUser.avatarurlMxc || "";
+            avatar = remoteUser.avatarurlMxc || undefined;
         } else {
             log.warn("Remote user wasn't found, using blank avatar");
         }
