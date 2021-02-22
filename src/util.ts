@@ -350,7 +350,7 @@ export class Util {
         if (res && res.users_default) {
             haveLevel = res.users_default;
         }
-        if (res && res.users && res.users[userId] !== undefined) {
+        if (res && res.users && typeof res.users[userId] === "number") {
             haveLevel = res.users[userId];
         }
         return haveLevel >= requiredLevel;
