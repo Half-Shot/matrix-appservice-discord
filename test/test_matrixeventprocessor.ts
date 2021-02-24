@@ -488,7 +488,7 @@ describe("MatrixEventProcessor", () => {
                 sender: "@test_long:localhost",
             } as IMatrixEvent, mockChannel as any);
             const author = embeds.messageEmbed.author;
-            expect(author!.name).to.equal("@test_long:localhost");
+            expect(author!.name).to.equal("this is a very very long display");
         });
 
         it("Should cap the sender name if it is too long", async () => {

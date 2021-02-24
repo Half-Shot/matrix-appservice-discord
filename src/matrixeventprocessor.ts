@@ -514,9 +514,7 @@ export class MatrixEventProcessor {
         }
 
         if (profile) {
-            if (profile.displayname &&
-                profile.displayname.length >= MIN_NAME_LENGTH &&
-                profile.displayname.length <= MAX_NAME_LENGTH) {
+            if (profile.displayname && profile.displayname.length >= MIN_NAME_LENGTH) {
                 displayName = profile.displayname;
             }
 
