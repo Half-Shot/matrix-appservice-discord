@@ -38,6 +38,8 @@ bridge:
   disableInviteNotifications: false
   # Auto-determine the language of code blocks (this can be CPU-intensive)
   determineCodeLanguage: false
+  # Which users whose messages not to bridge (supports regexes)
+  userBlacklist: []
 # Authentication configuration for the discord bot.
 auth:
   # This MUST be a string (wrapped in quotes)

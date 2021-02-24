@@ -130,6 +130,15 @@ export class MatrixEventProcessor {
         } else if (this.bridge.isNamespacedUser(event.sender)) {
             // Ignore echo
             return;
+        } else if (event.type === "m.room.encryption" && remoteRoom) {
+            await this.HandleEncryptionWarning(event.room_id);
+            return;
+        } else if (this.config.bridge.IsUserBlacklisted(event.sender)) {
+            log.verbose(`${event.event_id} ${event.type} is by blacklisted user ${event.sender}, ignoring.`);
+            return;
+        } else if (this.config.bridge.IsUserBlacklisted(event.state_key)) {
+            log.verbose(`${event.event_id} ${event.type} pertains to blacklisted user ${event.state_key}, ignoring.`);
+            return;
         } else if (["m.room.member", "m.room.name", "m.room.topic"].includes(event.type)) {
             await this.ProcessStateEvent(event);
             return;
@@ -147,9 +156,6 @@ export class MatrixEventProcessor {
                     log.warn("There was an error sending a matrix event", err);
                 }
             }
-            return;
-        } else if (event.type === "m.room.encryption" && remoteRoom) {
-            await this.HandleEncryptionWarning(event.room_id);
             return;
         }
         // throw new Unstable.EventUnknownError(`${event.event_id} not processed by bridge`);
@@ -182,6 +188,11 @@ export class MatrixEventProcessor {
      * @throws {Unstable.ForeignNetworkError}
      */
     public async ProcessMsgEvent(event: IMatrixEvent, room: RemoteStoreRoom): Promise<void> {
+        if (this.config.bridge.IsUserBlacklisted(event.sender)) {
+            log.verbose(`Message ${event.event_id} is by blacklisted user ${event.sender}, ignoring.`);
+            return;
+        }
+
         const guildId = room.data.discord_guild!;
         const channelId = room.data.discord_channel!;
         const mxClient = this.bridge.botClient;
@@ -232,6 +243,14 @@ export class MatrixEventProcessor {
 
         if (event.sender === this.bridge.botUserId) {
             log.verbose(`${event.event_id} ${event.type} is by our bot user, ignoring.`);
+            return;
+        }
+        if (this.config.bridge.IsUserBlacklisted(event.sender)) {
+            log.verbose(`${event.event_id} ${event.type} is by blacklisted user ${event.sender}, ignoring.`);
+            return;
+        }
+        if (this.config.bridge.IsUserBlacklisted(event.state_key)) {
+            log.verbose(`${event.event_id} ${event.type} pertains to blacklisted user ${event.state_key}, ignoring.`);
             return;
         }
 
