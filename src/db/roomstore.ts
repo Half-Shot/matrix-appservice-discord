@@ -25,7 +25,7 @@ const log = new Log("DbRoomStore");
 
 /**
  * A RoomStore compatible with
- * https://github.com/matrix-org/matrix-appservice-bridge/blob/master/lib/components/room-bridge-store.js
+ * https://github.com/matrix-org/matrix-appservice-bridge/blob/master/src/components/room-bridge-store.ts
  * that accesses the database instead.
  */
 
@@ -122,8 +122,6 @@ export class DbRoomStore {
     }
 
     public async upsertEntry(entry: IRoomStoreEntry) {
-        const promises: Promise<void>[] = [];
-
         const row = (await this.db.Get("SELECT * FROM room_entries WHERE id = $id", {id: entry.id})) || {};
 
         if (!row.id) {

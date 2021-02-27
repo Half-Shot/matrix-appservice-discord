@@ -16,7 +16,6 @@ limitations under the License.
 
 import * as Discord from "better-discord.js";
 import { IMatrixMessage } from "./matrixtypes";
-import * as Parser from "node-html-parser";
 import { Util } from "./util";
 import { DiscordBot } from "./bot";
 import { MatrixClient } from "matrix-bot-sdk";
@@ -37,7 +36,6 @@ export interface IMatrixMessageProcessorParams {
 }
 
 export class MatrixMessageProcessor {
-    private listBulletPoints: string[] = ["●", "○", "■", "‣"];
     private parser: MatrixMessageParser;
     constructor(public bot: DiscordBot, private config: DiscordBridgeConfig) {
         this.parser = new MatrixMessageParser();

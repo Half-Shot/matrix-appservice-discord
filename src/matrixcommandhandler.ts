@@ -27,7 +27,6 @@ import * as markdown from "marked";
 const log = new Log("MatrixCommandHandler");
 
 const PROVISIONING_DEFAULT_POWER_LEVEL = 50;
-const PROVISIONING_DEFAULT_USER_POWER_LEVEL = 0;
 const ROOM_CACHE_MAXAGE_MS = 15 * 60 * 1000;
 
 export class MatrixCommandHandler {

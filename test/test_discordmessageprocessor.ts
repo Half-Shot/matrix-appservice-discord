@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import { expect } from "chai";
-import * as Discord from "better-discord.js";
 import { DiscordMessageProcessor } from "../src/discordmessageprocessor";
 import { DiscordBot } from "../src/bot";
 import { MockGuild } from "./mocks/guild";

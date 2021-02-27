@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import {MockMember} from "./member";
-import {MockCollection, MockCollectionManager} from "./collection";
+import {MockCollection} from "./collection";
 import {Permissions, PermissionResolvable, TextChannel} from "better-discord.js";
 import { MockGuild } from "./guild";
 

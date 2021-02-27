@@ -16,7 +16,7 @@ limitations under the License.
 /* eslint-disable @typescript-eslint/camelcase */
 
 import { expect } from "chai";
-import { DiscordStore, CURRENT_SCHEMA } from "../../src/store";
+import { DiscordStore } from "../../src/store";
 import { RemoteStoreRoom, MatrixStoreRoom } from "../../src/db/roomstore";
 
 // we are a test file and thus need those

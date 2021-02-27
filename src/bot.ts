@@ -66,7 +66,6 @@ export interface IThirdPartyLookup {
 export class DiscordBot {
     private clientFactory: DiscordClientFactory;
     private bot: Discord.Client;
-    private presenceInterval: number;
     private sentMessages: string[];
     private lastEventIds: { [channelId: string]: string };
     private discordMsgProcessor: DiscordMessageProcessor;

@@ -24,7 +24,6 @@ import {MockUser} from "./user";
 export class MockDiscordClient {
     public guilds = new MockCollectionManager<string, MockGuild>();
     public user: MockUser;
-    private testLoggedIn: boolean = false;
     private testCallbacks: Map<string, (...data: any[]) => void> = new Map();
 
     constructor() {
@@ -62,7 +61,6 @@ export class MockDiscordClient {
         });
     }
 
-
     public async emit(event: string, ...data: any[]) {
         return await this.testCallbacks.get(event)!.apply(this, data);
     }
@@ -71,7 +69,6 @@ export class MockDiscordClient {
         if (token !== "passme") {
             throw new Error("Mock Discord Client only logins with the token 'passme'");
         }
-        this.testLoggedIn = true;
         if (this.testCallbacks.has("ready")) {
             this.testCallbacks.get("ready")!();
         }
