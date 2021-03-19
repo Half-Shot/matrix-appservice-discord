@@ -15,7 +15,7 @@ is formatted as https://discord.com/channels/``guildid``/``channelid``
 
 * The ``adminme`` script is provided to set Admin/Moderator or any other custom power level to a specific user.
 * e.g. To set Alice to Admin on her ``example.com`` HS on default config. (``config.yaml``)
-  * ``npm run adminme -- -r '!AbcdefghijklmnopqR:example.com' -u '@Alice:example.com' -p '100'``
+  * ``npm run adminme -- -m '!AbcdefghijklmnopqR:example.com' -u '@Alice:example.com' -p '100'``
   * Run ``npm run adminme -- -h`` for usage.
 
 Please note that `!AbcdefghijklmnopqR:example.com` is the internal room id and will always begin with `!`.
