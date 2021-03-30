@@ -468,7 +468,7 @@ export class DiscordBot {
                 return;
             }
             const link = `https://discord.com/channels/${chan.guild.id}/${chan.id}/${editEventId}`;
-            embedSet.messageEmbed.description = `[Edit](${link}): ${embedSet.messageEmbed.description}`;
+            embedSet.messageEmbed.description = `[Edit](<${link}>): ${embedSet.messageEmbed.description}`;
             await this.send(embedSet, opts, roomLookup, event);
         } catch (err) {
             // throw wrapError(err, Unstable.ForeignNetworkError, "Couldn't edit message");
