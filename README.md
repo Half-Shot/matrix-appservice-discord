@@ -139,6 +139,7 @@ In a vague order of what is coming up next
      - [x] Audio/Video content
      - [ ] Typing notifs (**Not supported, requires syncing**)
      - [x] User Profiles
+     - [ ] Reactions
  - Discord -> Matrix
      - [x] Text content
      - [x] Image content
@@ -147,6 +148,7 @@ In a vague order of what is coming up next
      - [x] User Profiles
      - [x] Presence
      - [x] Per-guild display names.
+     - [ ] Reactions
  - [x] Group messages
  - [ ] Third Party Lookup
     - [x] Rooms
