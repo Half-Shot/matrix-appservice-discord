@@ -123,17 +123,16 @@ export class DiscordClientFactory {
     }
 
     public bindMetricsToChannel(channel: TextChannel) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const flexChan = channel as any;
+        // eslint-disable-next-line @typescript-eslint/ban-types
+        const flexChan = channel as { _xmet_send?: Function };
         if (flexChan._xmet_send !== undefined) {
             return;
         }
         // Prefix the real functions with _xmet_
-        // eslint-disable-next-line @typescript-eslint/camelcase
         flexChan._xmet_send = channel.send;
         channel.send = (...rest) => {
             MetricPeg.get.remoteCall("channel.send");
-            return flexChan._xmet_send.apply(channel, rest);
+            return flexChan._xmet_send!.apply(channel, rest);
         };
     }
 }

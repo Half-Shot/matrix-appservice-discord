@@ -16,7 +16,6 @@ limitations under the License.
 /* eslint-disable max-classes-per-file, @typescript-eslint/no-empty-function */
 
 import { Gauge, Counter, Histogram, collectDefaultMetrics, register } from "prom-client";
-import { Log } from "./log";
 import { Appservice,
     IMetricContext,
     METRIC_MATRIX_CLIENT_FAILED_FUNCTION_CALL,
@@ -26,7 +25,6 @@ import { Appservice,
 import { DiscordBridgeConfigMetrics } from "./config";
 import * as http from "http";
 
-const log = new Log("BridgeMetrics");
 const REQUEST_EXPIRE_TIME_MS = 30000;
 
 export interface IBridgeMetrics {
@@ -170,6 +168,7 @@ export class PrometheusBridgeMetrics implements IBridgeMetrics {
         this.storeCallCounter.inc({method, cached: cached ? "yes" : "no"});
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private sdkStartMetric(metricName: string, context: IMetricContext) {
         // We don't use this yet.
     }
@@ -186,10 +185,12 @@ export class PrometheusBridgeMetrics implements IBridgeMetrics {
         }, timeMs);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private sdkResetMetric(metricName: string, context: IMetricContext) {
         // We don't use this yet.
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private sdkIncrementMetric(metricName: string, context: IMetricContext, amount: number) {
         if (metricName === METRIC_MATRIX_CLIENT_SUCCESSFUL_FUNCTION_CALL) {
             this.matrixRequestStatus.set(context.uniqueId, "success");
@@ -198,6 +199,7 @@ export class PrometheusBridgeMetrics implements IBridgeMetrics {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     private sdkDecrementMetric(metricName: string, context: IMetricContext, amount: number) {
         // We don't use this yet.
     }

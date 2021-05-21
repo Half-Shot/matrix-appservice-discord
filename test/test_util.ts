@@ -19,9 +19,6 @@ import { expect } from "chai";
 import { Util, ICommandActions, ICommandParameters } from "../src/util";
 import { AppserviceMock } from "./mocks/appservicemock";
 
-// we are a test file and thus need those
-/* tslint:disable:no-unused-expression max-file-line-count no-any */
-
 function CreateMockIntent(members): any {
     const as = new AppserviceMock({
         roommembers: members.map((member) =>
@@ -74,7 +71,7 @@ describe("Util", () => {
         };
         describe("HandleHelpCommand", () => {
             it("handles empty commands", async () => {
-                const {command, args} = Util.MsgToArgs("!fox help", "!fox");
+                const {args} = Util.MsgToArgs("!fox help", "!fox");
                 const retStr = await Util.HandleHelpCommand(
                     "!fox",
                     {} as any,
@@ -84,7 +81,7 @@ describe("Util", () => {
                 expect(retStr).to.equal("No commands found");
             });
             it("parses general help message", async () => {
-                const {command, args} = Util.MsgToArgs("!fox help", "!fox");
+                const {args} = Util.MsgToArgs("!fox help", "!fox");
                 const retStr = await Util.HandleHelpCommand(
                     "!fox",
                     actions,
@@ -92,7 +89,7 @@ describe("Util", () => {
                     args,
                 );
                 expect(retStr).to.equal(
-`Available Commands:
+                    `Available Commands:
  - \`!fox action <param1> <param2>\`: floof
 
 Parameters:
@@ -101,7 +98,7 @@ Parameters:
 `);
             });
             it("parses specific help message", async () => {
-                const {command, args} = Util.MsgToArgs("!fox help action", "!fox");
+                const {args} = Util.MsgToArgs("!fox help action", "!fox");
                 const retStr = await Util.HandleHelpCommand(
                     "!fox",
                     actions,
@@ -109,7 +106,7 @@ Parameters:
                     args,
                 );
                 expect(retStr).to.equal(
-`\`!fox action <param1> <param2>\`: floof
+                    `\`!fox action <param1> <param2>\`: floof
 Fox goes floof!`);
             });
         });
@@ -305,15 +302,15 @@ Fox goes floof!`);
     describe("EscapeStringForUserId", () => {
         it("should encode a string properly", () => {
             expect(Util.EscapeStringForUserId("ThisIsAString")).to
-            .equal("=54his=49s=41=53tring");
+                .equal("=54his=49s=41=53tring");
             expect(Util.EscapeStringForUserId('1!2"3£4$5%6^7&8*9(0)')).to
-            .equal("1=212=223=a34=245=256=5e7=268=2a9=280=29");
+                .equal("1=212=223=a34=245=256=5e7=268=2a9=280=29");
         });
         it("should not-reencode a string", () => {
             expect(Util.EscapeStringForUserId("=54his=49s=41=53tring")).to
-            .equal("=54his=49s=41=53tring");
+                .equal("=54his=49s=41=53tring");
             expect(Util.EscapeStringForUserId("1=212=223=a34=245=256=5e7=268=2a9=280=29")).to
-            .equal("1=212=223=a34=245=256=5e7=268=2a9=280=29");
+                .equal("1=212=223=a34=245=256=5e7=268=2a9=280=29");
         });
     });
 });

@@ -1,6 +1,6 @@
 export class Lock<T> {
     private locks: Map<T, {i: NodeJS.Timeout|null, r: (() => void)|null}>;
-    private lockPromises: Map<T, Promise<{}>>;
+    private lockPromises: Map<T, Promise<void>>;
     constructor(
         private timeout: number,
     ) {
@@ -17,7 +17,7 @@ export class Lock<T> {
         // set a dummy lock so that if we re-set again before releasing it won't do anthing
         this.locks.set(key, {i: null, r: null});
 
-        const p = new Promise<{}>((resolve) => {
+        const p = new Promise<void>((resolve) => {
             // first we check if the lock has the key....if not, e.g. if it
             // got released too quickly, we still want to resolve our promise
             if (!this.locks.has(key)) {

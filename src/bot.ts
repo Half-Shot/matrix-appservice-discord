@@ -66,7 +66,6 @@ export interface IThirdPartyLookup {
 export class DiscordBot {
     private clientFactory: DiscordClientFactory;
     private bot: Discord.Client;
-    private presenceInterval: number;
     private sentMessages: string[];
     private lastEventIds: { [channelId: string]: string };
     private discordMsgProcessor: DiscordMessageProcessor;
@@ -137,7 +136,7 @@ export class DiscordBot {
     }
 
     public GetIntentFromDiscordMember(member: Discord.GuildMember | Discord.PartialUser | Discord.User,
-                                      webhookID: string|null = null): Intent {
+        webhookID: string|null = null): Intent {
         if (webhookID) {
             // webhookID and user IDs are the same, they are unique, so no need to prefix _webhook_
             const name = member instanceof Discord.GuildMember ? member.user.username : member.username;
@@ -508,8 +507,8 @@ export class DiscordBot {
                         });
                 }
             } catch (err) {
-               // throw wrapError(err, Unstable.ForeignNetworkError, "Unable to create \"_matrix\" webhook");
-               log.warn("Unable to create _matrix webook:", err);
+                // throw wrapError(err, Unstable.ForeignNetworkError, "Unable to create \"_matrix\" webhook");
+                log.warn("Unable to create _matrix webook:", err);
             }
         }
         try {
@@ -581,6 +580,7 @@ export class DiscordBot {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public OnUserQuery(userId: string): boolean {
         return false;
     }
@@ -594,7 +594,7 @@ export class DiscordBot {
                 return await guild.members.fetch(userId);
             }
             return await this.bot.users.fetch(userId);
-        } catch (ex) {
+        } catch {
             log.warn(`Could not fetch user data for ${userId} (guild: ${guildId})`);
             return undefined;
         }
@@ -639,7 +639,6 @@ export class DiscordBot {
         }
         if (!dbEmoji.Result) {
             const url = `https://cdn.discordapp.com/emojis/${id}${animated ? ".gif" : ".png"}`;
-            const intent = this.bridge.botIntent;
             const content = (await Util.DownloadFile(url)).buffer;
             const type = animated ? "image/gif" : "image/png";
             const mxcUrl = await this.bridge.botIntent.underlyingClient.uploadContent(content, type, name);
@@ -653,7 +652,7 @@ export class DiscordBot {
     }
 
     public async GetRoomIdsFromGuild(
-            guild: Discord.Guild, member?: Discord.GuildMember, useCache: boolean = true): Promise<string[]> {
+        guild: Discord.Guild, member?: Discord.GuildMember, useCache: boolean = true): Promise<string[]> {
         if (useCache) {
             const res = this.roomIdsForGuildCache.get(`${guild.id}:${member ? member.id : ""}`);
 
@@ -722,8 +721,8 @@ export class DiscordBot {
         let res: Discord.Message;
         const botChannel = await this.GetChannelFromRoomId(roomId) as Discord.TextChannel;
         if (restore) {
-            await tchan.overwritePermissions([
-                {
+            await tchan.overwritePermissions(
+                [{
                     allow: ["SEND_MESSAGES", "VIEW_CHANNEL"],
                     id: kickee.id,
                 }],
@@ -752,8 +751,8 @@ export class DiscordBot {
         this.channelLock.release(botChannel.id);
         log.info(`${word} ${kickee}`);
 
-        await tchan.overwritePermissions([
-            {
+        await tchan.overwritePermissions(
+            [{
                 deny: ["SEND_MESSAGES", "VIEW_CHANNEL"],
                 id: kickee.id,
             }],
@@ -763,8 +762,8 @@ export class DiscordBot {
             // Kicks will let the user back in after ~30 seconds.
             setTimeout(async () => {
                 log.info(`Kick was lifted for ${kickee.displayName}`);
-                await tchan.overwritePermissions([
-                    {
+                await tchan.overwritePermissions(
+                    [{
                         allow: ["SEND_MESSAGES", "VIEW_CHANNEL"],
                         id: kickee.id,
                     }],
@@ -840,8 +839,8 @@ export class DiscordBot {
     }
 
     private async SendMatrixMessage(matrixMsg: IDiscordMessageParserResult, chan: Discord.Channel,
-                                    guild: Discord.Guild, author: Discord.User,
-                                    msgID: string): Promise<boolean> {
+        guild: Discord.Guild, author: Discord.User,
+        msgID: string): Promise<boolean> {
         const rooms = await this.channelSync.GetRoomIdsFromChannel(chan);
         const intent = this.GetIntentFromDiscordMember(author);
 
@@ -879,7 +878,7 @@ export class DiscordBot {
                     clearTimeout(this.typingTimers[typingKey]);
                 }
                 this.typingTimers[typingKey] = setTimeout(async () => {
-                    this.OnTyping(channel, user, false).catch((ex) => {
+                    this.OnTyping(channel, user, false).catch(() => {
                         log.error(`Failed to reset typing after ${TYPING_TIMEOUT_MS}ms for ${user.id}`);
                     });
                     delete this.typingTimers[typingKey];
@@ -908,11 +907,11 @@ export class DiscordBot {
         // Test for webhooks
         if (msg.webhookID) {
             const webhook = (await chan.fetchWebhooks())
-                            .filter((h) => h.name === "_matrix").first();
+                .filter((h) => h.name === "_matrix").first();
             if (webhook && msg.webhookID === webhook.id) {
                 // Filter out our own webhook messages.
                 log.verbose("Not reflecting own webhook messages");
-              // Filter out our own webhook messages.
+                // Filter out our own webhook messages.
                 MetricPeg.get.requestOutcome(msg.id, true, "dropped");
                 return;
             }
@@ -1088,11 +1087,11 @@ export class DiscordBot {
             const matrixIds = storeEvent.MatrixId.split(";");
             try {
                 await intent.underlyingClient.redactEvent(matrixIds[1], matrixIds[0]);
-            } catch (ex) {
+            } catch {
                 log.warn(`Failed to delete ${storeEvent.DiscordId}, retrying as bot`);
                 try {
                     await this.bridge.botIntent.underlyingClient.redactEvent(matrixIds[1], matrixIds[0]);
-                } catch (ex) {
+                } catch {
                     log.warn(`Failed to delete ${storeEvent.DiscordId}, giving up`);
                 }
             }

@@ -26,9 +26,6 @@ import { AppserviceMock } from "./mocks/appservicemock";
 import { MockUser } from "./mocks/user";
 import { MockTextChannel } from "./mocks/channel";
 
-// we are a test file and thus need those
-/* tslint:disable:no-unused-expression max-file-line-count no-any */
-
 const mockBridge = new AppserviceMock({});
 
 const modDiscordBot = Proxyquire("../src/bot", {

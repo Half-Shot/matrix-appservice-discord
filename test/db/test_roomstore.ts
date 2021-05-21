@@ -13,14 +13,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-/* eslint-disable @typescript-eslint/camelcase */
 
 import { expect } from "chai";
 import { DiscordStore, CURRENT_SCHEMA } from "../../src/store";
 import { RemoteStoreRoom, MatrixStoreRoom } from "../../src/db/roomstore";
-
-// we are a test file and thus need those
-/* tslint:disable: no-any no-unused-expression */
 
 let store: DiscordStore;
 describe("RoomStore", () => {

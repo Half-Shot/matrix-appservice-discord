@@ -51,17 +51,16 @@ const optionDefinitions = [
 const options = args(optionDefinitions);
 
 if (options.help) {
-    /* eslint-disable no-console */
     console.log(usage([
-    {
-        content: "A tool to fix channels of rooms already bridged " +
+        {
+            content: "A tool to fix channels of rooms already bridged " +
         "to matrix, to make sure their names, icons etc. are correctly.",
-        header: "Fix bridged channels",
-    },
-    {
-        header: "Options",
-        optionList: optionDefinitions,
-    },
+            header: "Fix bridged channels",
+        },
+        {
+            header: "Options",
+            optionList: optionDefinitions,
+        },
     ]));
     process.exit(0);
 }
@@ -117,4 +116,4 @@ async function run() {
     process.exit(0);
 }
 
-run(); // tslint:disable-line no-floating-promises
+void run();

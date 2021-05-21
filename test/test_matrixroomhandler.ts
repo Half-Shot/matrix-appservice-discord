@@ -23,9 +23,6 @@ import { MockGuild } from "./mocks/guild";
 import { Util } from "../src/util";
 import { AppserviceMock } from "./mocks/appservicemock";
 
-// we are a test file and thus need those
-/* tslint:disable:no-unused-expression max-file-line-count no-any */
-
 const MatrixRoomHandler = (Proxyquire("../src/matrixroomhandler", {
     "./util": {
         Util: {
@@ -150,7 +147,7 @@ describe("MatrixRoomHandler", () => {
             const {handler} = createRH({});
             const ret = await handler.OnAliasQuery("#_discord_123_456:localhost");
             expect(ret).to.be.deep.equal({
-                    initial_state: [
+                initial_state: [
                     {
                         content: {
                             join_rule: "public",

@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/* eslint-disable no-console */
 /**
  * Allows you to become an admin for a room that the bot is in control of.
  */
@@ -71,7 +70,6 @@ const optionDefinitions = [
 const options = args(optionDefinitions);
 
 if (options.help) {
-    /* eslint-disable no-console */
     console.log(usage([
         {
             content: "A tool to give a user a power level in a bot user controlled room.",
@@ -115,4 +113,4 @@ async function run() {
     }
 }
 
-run(); // tslint:disable-line no-floating-promises
+void run();

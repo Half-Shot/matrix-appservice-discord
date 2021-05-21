@@ -1,8 +1,5 @@
 import { IMatrixEvent } from "../../src/matrixtypes";
 import { expect } from "chai";
-
-/* tslint:disable:no-unused-expression no-any */
-
 interface IAppserviceMockOpts {
     roommembers?: IMatrixEvent[];
     stateEventFetcher?: (roomId, stateType, stateKey) => Promise<any>;
@@ -55,7 +52,7 @@ class AppserviceMockBase {
         return true;
     }
 
-    protected funcCalled(funcName: string, ...args: any[]) {
+    protected funcCalled(funcName: string, ...args: any[]): void {
         this.calls[funcName] = this.calls[funcName] || [];
         this.calls[funcName].push(args);
     }
@@ -76,13 +73,13 @@ export class AppserviceMock extends AppserviceMockBase {
         this.cleanup();
     }
 
-    public cleanup() {
+    public cleanup(): void {
         this.intents = {};
         this.botIntent = new IntentMock(this.opts, "BOT");
         this.botClient = this.botIntent.underlyingClient;
     }
 
-    public isNamespacedUser(userId: string) {
+    public isNamespacedUser(userId: string): boolean {
         this.funcCalled("isNamespacedUser", userId);
         if (this.opts.userIdPrefix) {
             return userId.startsWith(this.opts.userIdPrefix);
@@ -90,7 +87,7 @@ export class AppserviceMock extends AppserviceMockBase {
         throw Error("No prefix defined");
     }
 
-    public isNamespacedAlias(alias: string) {
+    public isNamespacedAlias(alias: string): boolean {
         this.funcCalled("isNamespacedAlias", alias);
         if (this.opts.aliasPrefix) {
             return alias.startsWith(this.opts.aliasPrefix);
@@ -98,7 +95,7 @@ export class AppserviceMock extends AppserviceMockBase {
         throw Error("No prefix defined");
     }
 
-    public getIntent(userId: string) {
+    public getIntent(userId: string): IntentMock {
         this.funcCalled("getIntent", userId);
         if (!this.intents[userId]) {
             this.intents[userId] = new IntentMock(this.opts, userId);
@@ -106,7 +103,7 @@ export class AppserviceMock extends AppserviceMockBase {
         return this.intents[userId];
     }
 
-    public getIntentForSuffix(suffix: string) {
+    public getIntentForSuffix(suffix: string): IntentMock {
         this.funcCalled("getIntentForSuffix", suffix);
         if (!this.intents[suffix]) {
             this.intents[suffix] = new IntentMock(this.opts, suffix);
@@ -114,7 +111,7 @@ export class AppserviceMock extends AppserviceMockBase {
         return this.intents[suffix];
     }
 
-    public getAliasForSuffix(suffix: string) {
+    public getAliasForSuffix(suffix: string): string {
         this.funcCalled("getAliasForSuffix", suffix);
         if (this.opts.aliasPrefix) {
             return `${this.opts.aliasPrefix}${suffix}:${this.opts.homeserverName}`;
@@ -122,7 +119,7 @@ export class AppserviceMock extends AppserviceMockBase {
         throw Error("No prefix defined");
     }
 
-    public getIntentForUserId(userId: string) {
+    public getIntentForUserId(userId: string): IntentMock {
         this.funcCalled("getIntentForUserId", userId);
         if (!this.intents[userId]) {
             this.intents[userId] = new IntentMock(this.opts, userId);
@@ -130,7 +127,7 @@ export class AppserviceMock extends AppserviceMockBase {
         return this.intents[userId];
     }
 
-    public getSuffixForUserId(userId: string) {
+    public getSuffixForUserId(userId: string): string {
         this.funcCalled("getSuffixForUserId", userId);
         const localpart = userId.split(":")[0];
         if (this.opts.userIdPrefix) {
@@ -139,7 +136,7 @@ export class AppserviceMock extends AppserviceMockBase {
         throw Error("No prefix defined");
     }
 
-    public async setRoomDirectoryVisibility(roomId: string, vis: string) {
+    public async setRoomDirectoryVisibility(roomId: string, vis: string): Promise<void> {
         this.funcCalled("setRoomDirectoryVisibility", roomId, vis);
     }
 }
@@ -151,23 +148,23 @@ class IntentMock extends AppserviceMockBase {
         this.underlyingClient = new MatrixClientMock(opts);
     }
 
-    public join() {
+    public join(): void {
         this.funcCalled("join");
     }
 
-    public joinRoom(roomIdOrAlias: string) {
+    public joinRoom(roomIdOrAlias: string): void {
         this.funcCalled("joinRoom", roomIdOrAlias);
     }
 
-    public leave(roomIdOrAlias: string) {
+    public leave(roomIdOrAlias: string): void {
         this.funcCalled("leave", roomIdOrAlias);
     }
 
-    public sendText(roomId: string, body: string) {
+    public sendText(roomId: string, body: string): void {
         this.funcCalled("sendText", roomId, body);
     }
 
-    public sendEvent(roomId: string, content: any) {
+    public sendEvent(roomId: string, content: any): void {
         this.funcCalled("sendEvent", roomId, content);
     }
 
@@ -182,19 +179,19 @@ class MatrixClientMock extends AppserviceMockBase {
         super();
     }
 
-    public banUser(roomId: string, userId: string) {
+    public banUser(roomId: string, userId: string): void {
         this.funcCalled("banUser", roomId, userId);
     }
 
-    public sendMessage(roomId: string, eventContent: IMatrixEvent) {
+    public sendMessage(roomId: string, eventContent: IMatrixEvent): void {
         this.funcCalled("sendMessage", roomId, eventContent);
     }
 
-    public sendEvent(roomId: string, body: string, msgtype: string) {
+    public sendEvent(roomId: string, body: string, msgtype: string): void {
         this.funcCalled("sendEvent", roomId, body, msgtype);
     }
 
-    public getRoomMembers(roomId: string) {
+    public getRoomMembers(roomId: string): IMatrixEvent[] {
         this.funcCalled("getRoomMembers", roomId);
         if (!this.opts.roommembers) {
             throw Error("No roommembers defined");
@@ -202,7 +199,7 @@ class MatrixClientMock extends AppserviceMockBase {
         return this.opts.roommembers;
     }
 
-    public getJoinedRooms() {
+    public getJoinedRooms(): string[] {
         this.funcCalled("getJoinedRooms");
         if (!this.opts.joinedrooms) {
             throw Error("No joinedrooms defined");
@@ -210,23 +207,23 @@ class MatrixClientMock extends AppserviceMockBase {
         return this.opts.joinedrooms;
     }
 
-    public leaveRoom(roomId: string) {
+    public leaveRoom(roomId: string): void {
         this.funcCalled("leaveRoom", roomId);
     }
 
-    public kickUser(roomId: string, userId: string) {
+    public kickUser(roomId: string, userId: string): void {
         this.funcCalled("kickUser", roomId, userId);
     }
 
-    public sendStateEvent(roomId: string, type: string, stateKey: string, content: {}) {
+    public sendStateEvent(roomId: string, type: string, stateKey: string, content: Record<string, unknown>): void {
         this.funcCalled("sendStateEvent", roomId, type, stateKey, content);
     }
 
-    public setAvatarUrl(avatarUrl: string) {
+    public setAvatarUrl(avatarUrl: string): void {
         this.funcCalled("setAvatarUrl", avatarUrl);
     }
 
-    public setDisplayName(displayName: string) {
+    public setDisplayName(displayName: string): void {
         this.funcCalled("setDisplayName", displayName);
     }
 

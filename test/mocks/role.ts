@@ -13,9 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
-// we are a test file and thus need those
-/* tslint:disable:no-unused-expression max-file-line-count no-any */
 export class MockRole {
     constructor(public id: string = "", public name = "", public color = 0, public position = 0) { }
 }

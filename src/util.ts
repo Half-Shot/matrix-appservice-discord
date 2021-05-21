@@ -27,14 +27,14 @@ import { Log } from "./log";
 import { Intent, MatrixClient } from "matrix-bot-sdk";
 const log = new Log("Util");
 
-type PERMISSIONTYPES = any | any[]; // tslint:disable-line no-any
+type PERMISSIONTYPES = any | any[];
 
 export interface ICommandAction {
     description?: string;
     help?: string;
     params: string[];
     permission?: PERMISSIONTYPES;
-    run(params: any): Promise<any>; // tslint:disable-line no-any
+    run(params: any): Promise<any>;
 }
 
 export interface ICommandActions {
@@ -43,7 +43,7 @@ export interface ICommandActions {
 
 export interface ICommandParameter {
     description?: string;
-    get?(param: string): Promise<any>; // tslint:disable-line no-any
+    get?(param: string): Promise<any>;
 }
 
 export interface ICommandParameters {
@@ -101,13 +101,13 @@ export class Util {
      * @returns {Promise<any>} The promise
      */
     public static async DelayedPromise(duration: number): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
+        return new Promise<void>((resolve) => {
             setTimeout(resolve, duration);
         });
     }
 
     public static GetBotLink(config: DiscordBridgeConfig): string {
-        /* tslint:disable:no-bitwise */
+        /* eslint-disable no-bitwise */
         const perms = Permissions.FLAGS.SEND_MESSAGES! |
             Permissions.FLAGS.CHANGE_NICKNAME! |
             Permissions.FLAGS.CONNECT! |
@@ -117,7 +117,7 @@ export class Util {
             Permissions.FLAGS.READ_MESSAGE_HISTORY! |
             Permissions.FLAGS.MANAGE_WEBHOOKS! |
             Permissions.FLAGS.MANAGE_MESSAGES!;
-        /* tslint:enable:no-bitwise */
+        /* eslint-enable no-bitwise */
 
         const clientId = config.auth.clientID;
 
@@ -395,12 +395,13 @@ export class Util {
 }
 
 // Type type
-type Type = Function;  // tslint:disable-line ban-types
+// eslint-disable-next-line @typescript-eslint/ban-types
+type Type = Function;
 
 /**
  * Returns true if `obj` is subtype of at least one of the given types.
  */
-export function isInstanceOfTypes(obj: object, types: Type[]): boolean {
+export function isInstanceOfTypes(obj: Record<string, unknown>, types: Type[]): boolean {
     return types.some((type) => obj instanceof type);
 }
 
@@ -416,9 +417,9 @@ export function isInstanceOfTypes(obj: object, types: Type[]): boolean {
  * the original error (stacktrace and error message).
  */
 export function wrapError<T extends Error>(
-    oldError: object|Error,
-    newErrorType: new (...args: any[]) => T,  // tslint:disable-line no-any
-    ...args: any[]  // tslint:disable-line no-any trailing-comma
+    oldError: Record<string,unknown>|Error,
+    newErrorType: new (...args: any[]) => T,
+    ...args: any[]
 ): T {
     const newError = new newErrorType(...args);
     let appendMsg;

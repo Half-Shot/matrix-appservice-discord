@@ -23,9 +23,6 @@ import { MockMember } from "./mocks/member";
 import { MockMessage } from "./mocks/message";
 import { MockTextChannel } from "./mocks/channel";
 
-// we are a test file and thus need those
-/* tslint:disable:no-unused-expression max-file-line-count no-any */
-
 const bot = {
     ChannelSyncroniser: {
         GetAliasFromChannel: async (chan) => {

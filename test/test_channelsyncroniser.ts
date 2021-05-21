@@ -26,9 +26,6 @@ import { MatrixStoreRoom, RemoteStoreRoom, IRoomStoreEntry } from "../src/db/roo
 import { Appservice } from "matrix-bot-sdk";
 import { AppserviceMock } from "./mocks/appservicemock";
 
-// we are a test file and thus need those
-/* tslint:disable:no-unused-expression max-file-line-count no-any */
-
 let REMOTECHANNEL_SET: any = false;
 let REMOTECHANNEL_REMOVED: any = false;
 
@@ -529,9 +526,10 @@ describe("ChannelSyncroniser", () => {
                 topic: "newTopic",
             });
             bridge.botIntent.underlyingClient.wasCalled("sendStateEvent", true, "!1:localhost", "m.room.avatar", "",
-            {
-                url: "mxc://new_icon",
-            });
+                {
+                    url: "mxc://new_icon",
+                }
+            );
             expect(REMOTECHANNEL_SET).is.true;
         });
     });

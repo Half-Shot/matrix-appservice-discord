@@ -45,7 +45,6 @@ const optionDefinitions = [
 const options = args(optionDefinitions);
 
 if (options.help) {
-    // eslint-disable-next-line no-console
     console.log(usage([
         {
             content: "A tool to obtain the Discord bot invitation URL.",

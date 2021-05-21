@@ -19,9 +19,6 @@ import { DiscordStore } from "../src/store";
 import { DbEmoji } from "../src/db/dbdataemoji";
 import { DbEvent } from "../src/db/dbdataevent";
 
-// we are a test file and thus need those
-/* tslint:disable:no-unused-expression max-file-line-count no-any */
-
 describe("DiscordStore", () => {
     describe("init", () => {
         it("can create a db", async () => {

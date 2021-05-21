@@ -31,7 +31,7 @@ export class Schema implements IDbSchema {
                 discord_id	TEXT UNIQUE NOT NULL,
                 options	INTEGER NOT NULL
             );`, "client_options",
-        )]);
+            )]);
     }
     public async rollBack(store: DiscordStore): Promise<void> {
         await store.db.Exec(

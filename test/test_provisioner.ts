@@ -19,9 +19,6 @@ import { Provisioner } from "../src/provisioner";
 import { MockChannel } from "./mocks/channel";
 import { MockMember } from "./mocks/member";
 
-// we are a test file and thus need those
-/* tslint:disable:no-any */
-
 const TIMEOUT_MS = 1000;
 
 describe("Provisioner", () => {

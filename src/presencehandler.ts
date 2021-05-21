@@ -26,11 +26,6 @@ export class PresenceHandlerStatus {
     public ShouldDrop: boolean = false;
 }
 
-interface IMatrixPresence {
-    presence?: "online"|"offline"|"unavailable";
-    status_msg?: string;
-}
-
 export class PresenceHandler {
     private presenceQueue: Presence[];
     private interval: NodeJS.Timeout | null;

@@ -37,7 +37,7 @@ export class DiscordBridgeConfig {
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public applyConfig(newConfig: {[key: string]: any}, configLayer: {[key: string]: any} = this) {
-          Object.keys(newConfig).forEach((key) => {
+        Object.keys(newConfig).forEach((key) => {
             if (configLayer[key] instanceof Object && !(configLayer[key] instanceof Array)) {
                 this.applyConfig(newConfig[key], configLayer[key]);
             } else {

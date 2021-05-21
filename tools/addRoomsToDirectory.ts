@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/* eslint-disable no-console */
 /**
  * Allows you to become an admin for a room the bot is in control of.
  */
@@ -53,7 +52,6 @@ const optionDefinitions = [
 const options = args(optionDefinitions);
 
 if (options.help) {
-    /* eslint-disable no-console */
     console.log(usage([
         {
             content: "A tool to set all the bridged rooms to visible in the directory.",
@@ -76,9 +74,7 @@ async function run(): Promise<void> {
         log.error(`Failed to load database`, e);
     }
     let rooms = await store!.roomStore.getEntriesByRemoteRoomData({
-        /* eslint-disable @typescript-eslint/camelcase */
         discord_type: "text",
-        /* eslint-disable @typescript-eslint/camelcase */
     });
     rooms = rooms.filter((r) => r.remote && r.remote.get("plumbed") !== true );
     log.info(`Got ${rooms.length} rooms to set`);
@@ -101,4 +97,4 @@ async function run(): Promise<void> {
     }
 }
 
-run(); // tslint:disable-line no-floating-promises
+void run();

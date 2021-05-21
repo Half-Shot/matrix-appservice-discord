@@ -55,10 +55,8 @@ export class DbEvent implements IDbDataMany {
 
         for (const rowM of rowsM) {
             const row = {
-                /* eslint-disable @typescript-eslint/camelcase */
                 discord_id: rowM.discord_id,
                 matrix_id: rowM.matrix_id,
-                /* eslint-enable @typescript-eslint/camelcase */
             };
             for (const rowD of await store.db.All(`
                     SELECT *
@@ -67,11 +65,9 @@ export class DbEvent implements IDbDataMany {
                 id: rowM.discord_id,
             })) {
                 this.rows.push({
-                    /* eslint-disable @typescript-eslint/camelcase */
                     ...row,
                     guild_id: rowD.guild_id,
                     channel_id: rowD.channel_id,
-                    /* eslint-enable @typescript-eslint/camelcase */
                 });
             }
         }
@@ -95,10 +91,8 @@ export class DbEvent implements IDbDataMany {
             INSERT INTO event_store
             (matrix_id,discord_id)
             VALUES ($matrix_id,$discord_id);`, {
-            /* eslint-disable @typescript-eslint/camelcase */
             discord_id: this.DiscordId,
             matrix_id: this.MatrixId,
-            /* eslint-enable @typescript-eslint/camelcase */
         });
         // Check if the discord item exists?
         const msgExists = await store.db.Get(`
@@ -114,14 +108,13 @@ export class DbEvent implements IDbDataMany {
             INSERT INTO discord_msg_store
             (msg_id, guild_id, channel_id)
             VALUES ($msg_id, $guild_id, $channel_id);`, {
-            /* eslint-disable @typescript-eslint/camelcase */
             channel_id: this.ChannelId,
             guild_id: this.GuildId,
             msg_id: this.DiscordId,
-            /* eslint-enable @typescript-eslint/camelcase */
         });
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public async Update(store: DiscordStore): Promise<void> {
         throw new Error("Update is not implemented");
     }
@@ -131,17 +124,13 @@ export class DbEvent implements IDbDataMany {
             DELETE FROM event_store
             WHERE matrix_id = $matrix_id
             AND discord_id = $discord_id;`, {
-            /* eslint-disable @typescript-eslint/camelcase */
             discord_id: this.DiscordId,
             matrix_id: this.MatrixId,
-            /* eslint-enable @typescript-eslint/camelcase */
         });
         return store.db.Run(`
             DELETE FROM discord_msg_store
             WHERE msg_id = $discord_id;`, {
-            /* eslint-disable @typescript-eslint/camelcase */
             discord_id: this.DiscordId,
-            /* eslint-enable @typescript-eslint/camelcase */
         });
     }
 }

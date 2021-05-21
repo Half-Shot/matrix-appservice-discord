@@ -60,7 +60,6 @@ const optionDefinitions = [
 const options = args(optionDefinitions);
 
 if (options.help) {
-    /* eslint-disable no-console */
     console.log(usage([
         {
             content: "A tool to fix usernames of ghosts already in " +
@@ -130,4 +129,4 @@ async function run() {
     process.exit(0);
 }
 
-run(); // eslint-disable no-floating-promises
+void run();

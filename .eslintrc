@@ -18,7 +18,7 @@
         "no-trailing-spaces": "error",
         "max-classes-per-file": ["warn", 1],
         "object-literal-sort-keys": "off",
-        "@typescript-eslint/no-explicit-any": "error",
+        "@typescript-eslint/no-explicit-any": "warn",
         "@typescript-eslint/prefer-for-of": "error",
         "@typescript-eslint/typedef": "warn",
         "@typescript-eslint/no-floating-promises": "error",
@@ -27,7 +27,16 @@
         "no-invalid-this": "error",
         "@typescript-eslint/no-throw-literal": "warn",
         "prefer-const": "error",
-        "indent": ["error", 4],
+        "@typescript-eslint/no-unused-vars": ["error",
+            {
+                "varsIgnorePattern": "^_"
+            }
+        ],
+        "indent": ["error", 4,
+            {
+                "SwitchCase": 1
+            }
+        ],
         "max-lines": ["warn", 500],
         "no-duplicate-imports": "error",
         "@typescript-eslint/array-type": "error",
@@ -35,7 +44,15 @@
         "no-bitwise": "error",
         "no-console": "error",
         "no-debugger": "error",
-        "prefer-template": "error",
+        "@typescript-eslint/naming-convention": ["error",
+            {
+                "selector": "default",
+                "format": ["camelCase", "PascalCase", "snake_case", "UPPER_CASE"],
+                "leadingUnderscore": "allow",
+                "trailingUnderscore": "forbid"
+            },
+        ],
+        "prefer-template": "off",
         // Disable these as they were introduced by @typescript-eslint/recommended
         "@typescript-eslint/no-use-before-define": "off",
         "@typescript-eslint/no-inferrable-types": "off",
@@ -50,7 +67,21 @@
             ],
             "rules": {
                 "@typescript-eslint/no-empty-function": "off",
-                "@typescript-eslint/no-explicit-any": "off"
+                "@typescript-eslint/no-explicit-any": "off",
+                "@typescript-eslint/no-unused-vars": ["warn",
+                    {
+                        "varsIgnorePattern": "^_"
+                    }
+                ],
+                "@typescript-eslint/no-var-requires": "off"
+            }
+        },
+        {
+            "files": [
+                "tools/**/*"
+            ],
+            "rules": {
+                "no-console": "off"
             }
         }
     ]

@@ -20,9 +20,6 @@ import {MockEmoji} from "./emoji";
 import {Channel} from "better-discord.js";
 import {MockRole} from "./role";
 
-// we are a test file and thus need those
-/* tslint:disable:no-unused-expression max-file-line-count no-any */
-
 export class MockGuild {
     public channels = new MockCollectionManager<string, Channel>();
     public members = new MockCollectionManager<string, MockMember>();

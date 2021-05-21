@@ -18,9 +18,6 @@ import { expect } from "chai";
 import { TimedCache } from "../../src/structures/timedcache";
 import { Util } from "../../src/util";
 
-// we are a test file and thus need those
-/* tslint:disable:no-unused-expression max-file-line-count no-any */
-
 describe("TimedCache", () => {
     it("should construct", () => {
         const timedCache = new TimedCache<string, number>(1000);

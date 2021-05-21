@@ -22,9 +22,6 @@ import { MockGuild } from "./mocks/guild";
 import { Util } from "../src/util";
 import { AppserviceMock } from "./mocks/appservicemock";
 
-// we are a test file and thus need those
-/* tslint:disable:no-unused-expression max-file-line-count no-any */
-
 let ROOMSUNBRIDGED = 0;
 let MARKED = -1;
 function createCH(opts: any = {}) {

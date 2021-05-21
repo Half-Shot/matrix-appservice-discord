@@ -16,9 +16,6 @@ limitations under the License.
 
 import {MockDiscordClient} from "./discordclient";
 
-// we are a test file and thus need those
-/* tslint:disable:no-unused-expression max-file-line-count no-any */
-
 export class DiscordClientFactory {
     private botClient: MockDiscordClient;
     constructor(config: any, store: any) { }

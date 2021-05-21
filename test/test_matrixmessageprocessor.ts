@@ -22,9 +22,6 @@ import { MockEmoji } from "./mocks/emoji";
 import { DbEmoji } from "../src/db/dbdataemoji";
 import { MatrixMessageProcessor } from "../src/matrixmessageprocessor";
 
-// we are a test file and thus need those
-/* tslint:disable:no-unused-expression max-file-line-count no-any */
-
 const bot = {
     GetChannelFromRoomId: async (roomId: string): Promise<MockChannel> => {
         if (roomId !== "!bridged:localhost") {
@@ -208,12 +205,11 @@ describe("MatrixMessageProcessor", () => {
             const result = await mp.FormatMessage(msg, guild as any, {
                 mxClient: {
                     lookupRoomAlias: async () => ({
-                            residentServers: [],
-                            roomId: "!bridged:localhost",
-                        }),
-                    } as any,
-                },
-            );
+                        residentServers: [],
+                        roomId: "!bridged:localhost",
+                    }),
+                } as any,
+            });
             expect(result).is.equal("<#1234>");
         });
         it("Ignores links without href", async () => {

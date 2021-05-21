@@ -122,8 +122,6 @@ export class DbRoomStore {
     }
 
     public async upsertEntry(entry: IRoomStoreEntry) {
-        const promises: Promise<void>[] = [];
-
         const row = (await this.db.Get("SELECT * FROM room_entries WHERE id = $id", {id: entry.id})) || {};
 
         if (!row.id) {
@@ -248,7 +246,7 @@ export class DbRoomStore {
         return res;
     }
 
-    public async linkRooms(matrixRoom: MatrixStoreRoom, remoteRoom: RemoteStoreRoom) {
+    public async linkRooms(matrixRoom: MatrixStoreRoom, remoteRoom: RemoteStoreRoom): Promise<void> {
         MetricPeg.get.storeCall("RoomStore.linkRooms", false);
         await this.upsertRoom(remoteRoom);
 
@@ -267,7 +265,8 @@ export class DbRoomStore {
         }
     }
 
-    public async setMatrixRoom(matrixRoom: MatrixStoreRoom) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    public async setMatrixRoom(matrixRoom: MatrixStoreRoom): Promise<void> {
         // This no-ops, because we don't store anything interesting.
     }
 
@@ -304,7 +303,7 @@ export class DbRoomStore {
         await this.db.Run(`DELETE FROM remote_room_data WHERE room_id = $remoteId`, {remoteId});
     }
 
-    public async removeEntriesByMatrixRoomId(matrixId: string) {
+    public async removeEntriesByMatrixRoomId(matrixId: string): Promise<void> {
         MetricPeg.get.storeCall("RoomStore.removeEntriesByMatrixRoomId", false);
         const entries = (await this.db.All(`SELECT * FROM room_entries WHERE matrix_id = $matrixId`, {matrixId})) || [];
         await Util.AsyncForEach(entries, async (entry) => {
@@ -316,7 +315,7 @@ export class DbRoomStore {
         });
     }
 
-    private async upsertRoom(room: RemoteStoreRoom) {
+    private async upsertRoom(room: RemoteStoreRoom): Promise<void> {
         MetricPeg.get.storeCall("RoomStore.upsertRoom", false);
         if (!room.data) {
             throw new Error("Tried to upsert a room with undefined data");
@@ -328,7 +327,6 @@ export class DbRoomStore {
         );
 
         const data = {
-            /* eslint-disable @typescript-eslint/camelcase */
             discord_channel:     room.data.discord_channel,
             discord_guild:       room.data.discord_guild,
             discord_iconurl:     room.data.discord_iconurl,
@@ -340,7 +338,6 @@ export class DbRoomStore {
             update_icon:         Number(room.data.update_icon || 0),
             update_name:         Number(room.data.update_name || 0),
             update_topic:        Number(room.data.update_topic || 0),
-            /* eslint-enable @typescript-eslint/camelcase */
         } as IRemoteRoomData;
 
         if (!existingRow) {

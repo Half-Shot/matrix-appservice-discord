@@ -58,7 +58,7 @@ export class DiscordStore implements IAppserviceStorageProvider {
         return this.pUserStore;
     }
 
-    public async backupDatabase(): Promise<void|{}> {
+    public async backupDatabase(): Promise<void|true> {
         if (this.config.filename == null) {
             log.warn("Backups not supported on non-sqlite connector");
             return;
@@ -75,7 +75,7 @@ export class DiscordStore implements IAppserviceStorageProvider {
                 return resolve(err === null);
             });
         }).then(async (result) => {
-            return new Promise<void|{}>((resolve, reject) => {
+            return new Promise<void|true>((resolve, reject) => {
                 if (!result) {
                     log.warn("NOT backing up database while a file already exists");
                     resolve(true);
@@ -103,9 +103,9 @@ export class DiscordStore implements IAppserviceStorageProvider {
         log.info(`Database schema version is ${version}, latest version is ${targetSchema}`);
         while (version < targetSchema) {
             version++;
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
             const schemaClass = require(`./db/schema/v${version}`).Schema;
-            let schema: IDbSchema;
-            schema = (new schemaClass() as IDbSchema);
+            const schema: IDbSchema = (new schemaClass() as IDbSchema);
             log.info(`Updating database to v${version}, "${schema.description}"`);
             try {
                 await schema.run(this);
@@ -153,21 +153,17 @@ export class DiscordStore implements IAppserviceStorageProvider {
         try {
             await Promise.all([
                 this.db.Run(
-                  `
-                  INSERT INTO user_id_discord_id (discord_id,user_id) VALUES ($discordId,$userId);
-                  `
-                , {
-                    discordId,
-                    userId,
-                }),
+                    `INSERT INTO user_id_discord_id (discord_id,user_id) VALUES ($discordId,$userId);`
+                    , {
+                        discordId,
+                        userId,
+                    }),
                 this.db.Run(
-                  `
-                  INSERT INTO discord_id_token (discord_id,token) VALUES ($discordId,$token);
-                  `
-                , {
-                    discordId,
-                    token,
-                }),
+                    `INSERT INTO discord_id_token (discord_id,token) VALUES ($discordId,$token);`
+                    , {
+                        discordId,
+                        token,
+                    }),
             ]);
         } catch (err) {
             log.error("Error storing user token ", err);
@@ -187,19 +183,15 @@ export class DiscordStore implements IAppserviceStorageProvider {
         try {
             await Promise.all([
                 this.db.Run(
-                    `
-                    DELETE FROM user_id_discord_id WHERE discord_id = $id
-                    `
-                , {
-                    id: discordId,
-                }),
+                    `DELETE FROM user_id_discord_id WHERE discord_id = $id`
+                    , {
+                        id: discordId,
+                    }),
                 this.db.Run(
-                    `
-                    DELETE FROM discord_id_token WHERE discord_id = $id
-                    `
-                , {
-                    id: discordId,
-                }),
+                    `DELETE FROM discord_id_token WHERE discord_id = $id`
+                    , {
+                        id: discordId,
+                    }),
             ]);
         } catch (err) {
             log.error("Error deleting user token ", err);
@@ -216,9 +208,9 @@ export class DiscordStore implements IAppserviceStorageProvider {
                 FROM user_id_discord_id
                 WHERE user_id = $userId;
                 `
-            , {
-                userId,
-            });
+                , {
+                    userId,
+                });
             if (rows != null) {
                 return rows.map((row) => row.discord_id as string);
             } else {
@@ -239,9 +231,9 @@ export class DiscordStore implements IAppserviceStorageProvider {
                 FROM discord_id_token
                 WHERE discord_id = $discordId
                 `
-            , {
-                discordId,
-            });
+                , {
+                    discordId,
+                });
             return row ? row.token as string : "";
         } catch (err) {
             log.error("Error getting discord ids ", err.Error);
@@ -249,8 +241,7 @@ export class DiscordStore implements IAppserviceStorageProvider {
         }
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any callable-types
-    public async Get<T extends IDbData>(dbType: {new(): T; }, params: any): Promise<T|null> {
+    public async Get<T extends IDbData>(dbType: {new(): T; }, params: unknown): Promise<T|null> {
         const dType = new dbType();
         log.silly(`get <${dType.constructor.name} with params ${params}>`);
         try {

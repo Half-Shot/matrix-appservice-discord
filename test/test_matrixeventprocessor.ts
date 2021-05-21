@@ -26,9 +26,6 @@ import { AppserviceMock } from "./mocks/appservicemock";
 import { Appservice } from "matrix-bot-sdk";
 import { RemoteStoreRoom } from "../src/db/roomstore";
 
-// we are a test file and thus need those
-/* tslint:disable:no-unused-expression max-file-line-count no-any */
-
 const TEST_TIMESTAMP = 1337;
 
 function buildRequest(eventData): IMatrixEvent {
@@ -183,7 +180,7 @@ function createMatrixEventProcessor(storeMockResults = 0) {
                 Result: true,
             };
         },
-        removeEntriesByMatrixRoomId: () => Promise.resolve(),
+        removeEntriesByMatrixRoomId: async () => {},
     };
 
     const Util = Object.assign(require("../src/util").Util, {
@@ -243,7 +240,7 @@ function createMatrixEventProcessor(storeMockResults = 0) {
             bridge as any,
             discordbot as any,
             store as any,
-    ), ch) as MatrixEventProcessor;
+        ), ch) as MatrixEventProcessor;
     return {processor, bridge, realBridge: bridge as any as Appservice};
 }
 const mockChannel = new MockChannel();
@@ -977,17 +974,17 @@ This is the reply`,
             };
             await processor.OnEvent(buildRequest({
                 type: "m.room.redaction"}), [ {
-                    id: "foo",
-                    matrix: { } as any,
-                    remote: { } as any,
-                }]);
+                id: "foo",
+                matrix: { } as any,
+                remote: { } as any,
+            }]);
             expect(MESSAGE_PROCCESS).equals("redacted");
         });
         it("should ignore redactions with no linked room", async () => {
             const {processor} =  createMatrixEventProcessor();
             const context = [ ];
             await processor.OnEvent(buildRequest({
-                    type: "m.room.redaction"}), context);
+                type: "m.room.redaction"}), context);
             expect(MESSAGE_PROCCESS).equals("");
         });
         it("should process regular messages", async () => {

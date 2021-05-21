@@ -21,9 +21,6 @@ import { MockChannel } from "./mocks/channel";
 import { AppserviceMock } from "./mocks/appservicemock";
 import * as Proxyquire from "proxyquire";
 
-// we are a test file and thus need those
-/* tslint:disable:no-unused-expression max-file-line-count no-any */
-
 function createCH(opts: any = {}, shouldBeJoined = true) {
 
     const bridge = new AppserviceMock({
@@ -115,7 +112,6 @@ describe("MatrixCommandHandler", () => {
             bridge.botIntent.underlyingClient.wasCalled("sendMessage", true, "!123:localhost", {
                 body: "**ERROR:** The owner of this bridge does not permit self-service bridging.",
                 format: "org.matrix.custom.html",
-                // tslint:disable prefer-template
                 formatted_body: `<p><strong>ERROR:</strong> The owner of this bridge` +
 ` does not permit self-service bridging.</p>\n`,
                 msgtype: "m.notice",
@@ -126,7 +122,6 @@ describe("MatrixCommandHandler", () => {
             await handler.Process(createEvent("!discord bridge"), createContext());
             const expected = "**ERROR:** insufficient permissions to use this " +
             "command! Try `!discord help` to see all available commands";
-            // tslint:disable prefer-template
             const htmlExpected = `<p><strong>ERROR:</strong> insufficient permissions to use this command!` +
 ` Try <code>!discord help</code> to see all available commands</p>\n`;
             bridge.botIntent.underlyingClient.wasCalled("sendMessage", true, "!123:localhost", {
@@ -203,8 +198,8 @@ describe("MatrixCommandHandler", () => {
             });
             it("will bridge with x/y syntax", async () => {
                 const {handler, bridge} = createCH({powerLevels: {
-                        users_default: 100,
-                    }});
+                    users_default: 100,
+                }});
                 await handler.Process(createEvent("!discord bridge 123/456"), createContext());
                 const expected = "I have bridged this room to your channel";
                 const expectedHtml = "<p>I have bridged this room to your channel</p>\n";
@@ -272,7 +267,6 @@ describe("MatrixCommandHandler", () => {
             it("will show error if unbridge fails", async () => {
                 const expected = "There was an error unbridging this room. Please " +
                 "try again later or contact the bridge operator.";
-                // tslint:disable prefer-template
                 const expectedHtml = `<p>There was an error unbridging this room. Please` +
 ` try again later or contact the bridge operator.</p>\n`;
                 const {handler, bridge} = createCH({

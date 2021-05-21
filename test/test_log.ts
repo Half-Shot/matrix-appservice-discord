@@ -17,9 +17,6 @@ limitations under the License.
 import { expect } from "chai";
 import * as Proxyquire from "proxyquire";
 
-// we are a test file and thus need those
-/* tslint:disable:no-unused-expression max-file-line-count no-any */
-
 let createdLogger: any = null;
 let loggedMessages: any[] = [];
 

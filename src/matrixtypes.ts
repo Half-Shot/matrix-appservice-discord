@@ -16,7 +16,7 @@ limitations under the License.
 
 export interface IMatrixEventContent {
     body?: string;
-    info?: any; // tslint:disable-line no-any
+    info?: any;
     name?: string;
     topic?: string;
     membership?: string;
@@ -25,7 +25,7 @@ export interface IMatrixEventContent {
     displayname?: string;
     avatar_url?: string;
     reason?: string;
-    "m.relates_to"?: any; // tslint:disable-line no-any
+    "m.relates_to"?: any;
 }
 
 export interface IMatrixEvent {
@@ -40,11 +40,11 @@ export interface IMatrixEvent {
     redacts?: string;
     replaces_state?: string;
     content?: IMatrixEventContent;
-    unsigned?: any; // tslint:disable-line no-any
+    unsigned?: any;
     origin_server_ts?: number;
-    users?: any; // tslint:disable-line no-any
-    users_default?: any; // tslint:disable-line no-any
-    notifications?: any; // tslint:disable-line no-any
+    users?: any;
+    users_default?: any;
+    notifications?: any;
 }
 
 export interface IMatrixMessage {
@@ -52,8 +52,8 @@ export interface IMatrixMessage {
     msgtype: string;
     formatted_body?: string;
     format?: string;
-    "m.new_content"?: any; // tslint:disable-line no-any
-    "m.relates_to"?: any; // tslint:disable-line no-any
+    "m.new_content"?: any;
+    "m.relates_to"?: any;
 }
 
 export interface IMatrixMediaInfo {

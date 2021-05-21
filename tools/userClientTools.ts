@@ -57,7 +57,6 @@ const optionDefinitions = [
 
 const options = args(optionDefinitions);
 if (options.help || (options.add && options.remove) || !(options.add || options.remove)) {
-    /* eslint-disable no-console */
     console.log(usage([
         {
             content: "A tool to give a user a power level in a bot user controlled room.",

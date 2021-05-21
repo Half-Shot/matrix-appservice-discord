@@ -18,9 +18,6 @@ import { expect } from "chai";
 import * as Proxyquire from "proxyquire";
 import { DiscordBridgeConfigAuth } from "../src/config";
 
-// we are a test file and thus need those
-/* tslint:disable:no-unused-expression max-file-line-count no-any */
-
 const DiscordClientFactory = Proxyquire("../src/clientfactory", {
     "better-discord.js": { Client: require("./mocks/discordclient").MockDiscordClient },
 }).DiscordClientFactory;

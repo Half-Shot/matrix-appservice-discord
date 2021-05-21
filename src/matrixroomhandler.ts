@@ -25,12 +25,7 @@ import { DbRoomStore, MatrixStoreRoom, RemoteStoreRoom } from "./db/roomstore";
 import { Appservice, Intent, IApplicationServiceProtocol } from "matrix-bot-sdk";
 
 const ICON_URL = "https://matrix.org/_matrix/media/r0/download/matrix.org/mlxoESwIsTbJrfXyAAogrNxA";
-const HTTP_UNSUPPORTED = 501;
 const ROOM_NAME_PARTS = 2;
-const PROVISIONING_DEFAULT_POWER_LEVEL = 50;
-const PROVISIONING_DEFAULT_USER_POWER_LEVEL = 0;
-const USERSYNC_STATE_DELAY_MS = 5000;
-const ROOM_CACHE_MAXAGE_MS = 15 * 60 * 1000;
 
 // Note: The schedule must not have duplicate values to avoid problems in positioning.
 // Disabled because it complains about the values in the array
@@ -156,11 +151,11 @@ export class MatrixRoomHandler {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public async tpGetProtocol(protocol: string): Promise<IApplicationServiceProtocol> {
         const instances = {};
         for (const guild of this.discord.GetGuilds()) {
             instances[guild.name] = {
-                /* eslint-disable @typescript-eslint/camelcase */
                 bot_user_id: this.botUserId,
                 desc: guild.name,
                 fields: {
@@ -168,11 +163,9 @@ export class MatrixRoomHandler {
                 },
                 icon: guild.iconURL || ICON_URL,
                 network_id: guild.id,
-                /* eslint-enable @typescript-eslint/camelcase */
             };
         }
         return {
-            /* eslint-disable @typescript-eslint/camelcase */
             field_types: {
                 // guild_name: {
                 //   regexp: "\S.{0,98}\S",
@@ -203,7 +196,6 @@ export class MatrixRoomHandler {
             instances,
             location_fields: ["guild_id", "channel_name"],
             user_fields: ["username", "discriminator"],
-            /* eslint-enable @typescript-eslint/camelcase */
         };
     }
 
@@ -254,17 +246,14 @@ export class MatrixRoomHandler {
         aliasLocalpart: string
     ) {
         const remote = new RemoteStoreRoom(`discord_${channel.guild.id}_${channel.id}`, {
-            /* eslint-disable @typescript-eslint/camelcase */
             discord_channel: channel.id,
             discord_guild: channel.guild.id,
             discord_type: "text",
             update_icon: 1,
             update_name: 1,
             update_topic: 1,
-            /* eslint-enable @typescript-eslint/camelcase */
         });
         const creationOpts = {
-            /* eslint-disable @typescript-eslint/camelcase */
             initial_state: [
                 {
                     content: {
@@ -276,7 +265,6 @@ export class MatrixRoomHandler {
             ],
             room_alias_name: aliasLocalpart,
             visibility: this.config.room.defaultVisibility,
-            /* eslint-enable @typescript-eslint/camelcase */
         };
         // We need to tempoarily store this until we know the room_id.
         await this.roomStore.linkRooms(

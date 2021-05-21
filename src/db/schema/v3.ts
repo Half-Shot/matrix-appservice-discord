@@ -30,13 +30,13 @@ export class Schema implements IDbSchema {
                 user_id TEXT NOT NULL,
                 PRIMARY KEY(discord_id, user_id)
             );`, "user_id_discord_id"),
-            store.createTable(`
+        store.createTable(`
             CREATE TABLE discord_id_token (
                 discord_id TEXT UNIQUE NOT NULL,
                 token	TEXT NOT NULL,
                 PRIMARY KEY(discord_id)
             );`, "discord_id_token",
-            )]);
+        )]);
 
         // Backup before moving data.
         await store.backupDatabase();
@@ -72,7 +72,6 @@ directory.`);
             log.error(err);
             return;
         }
-        const promises = [];
         const clientFactory = new DiscordClientFactory(store);
         for (const row of rows) {
             log.info("Moving ", row.userId);

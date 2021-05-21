@@ -18,9 +18,6 @@ import {MockCollectionManager} from "./collection";
 import {MockGuild} from "./guild";
 import {MockUser} from "./user";
 
-// we are a test file and thus need those
-/* tslint:disable:no-unused-expression max-file-line-count no-any */
-
 export class MockDiscordClient {
     public guilds = new MockCollectionManager<string, MockGuild>();
     public user: MockUser;

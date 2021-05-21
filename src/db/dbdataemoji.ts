@@ -60,14 +60,12 @@ export class DbEmoji implements IDbData {
             INSERT INTO emoji
             (emoji_id,name,animated,mxc_url,created_at,updated_at)
             VALUES ($emoji_id,$name,$animated,$mxc_url,$created_at,$updated_at);`, {
-            /* eslint-disable @typescript-eslint/camelcase */
             animated: Number(this.Animated),
             created_at: this.CreatedAt,
             emoji_id: this.EmojiId,
             mxc_url: this.MxcUrl,
             name: this.Name,
             updated_at: this.UpdatedAt,
-            /* eslint-enable @typescript-eslint/camelcase */
         });
     }
 
@@ -82,16 +80,15 @@ export class DbEmoji implements IDbData {
             updated_at = $updated_at
             WHERE
             emoji_id = $emoji_id`, {
-            /* eslint-disable @typescript-eslint/camelcase */
             animated: Number(this.Animated),
             emoji_id: this.EmojiId,
             mxc_url: this.MxcUrl,
             name: this.Name,
             updated_at: this.UpdatedAt,
-            /* eslint-enable @typescript-eslint/camelcase */
         });
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public async Delete(store: DiscordStore): Promise<void> {
         throw new Error("Delete is not implemented");
     }
