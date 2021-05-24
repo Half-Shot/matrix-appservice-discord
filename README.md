@@ -139,12 +139,14 @@ In a vague order of what is coming up next
      - [x] Audio/Video content
      - [ ] Typing notifs (**Not supported, requires syncing**)
      - [x] User Profiles
+     - [x] Reply
  - Discord -> Matrix
      - [x] Text content
      - [x] Image content
      - [x] Audio/Video content
      - [x] Typing notifs
      - [x] User Profiles
+     - [ ] Reply
      - [x] Presence
      - [x] Per-guild display names.
  - [x] Group messages
