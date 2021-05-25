@@ -1005,6 +1005,20 @@ export class DiscordBot {
                     formatted_body: result.formattedBody,
                     msgtype: result.msgtype,
                 };
+                if (msg.reference) {
+                    const storeEvent = await this.store.Get(DbEvent, {discord_id: msg.reference?.messageID})
+                    if (storeEvent && storeEvent.Result)
+                    {
+                        while(storeEvent.Next())
+                        {
+                            sendContent["m.relates_to"] = {
+                                "m.in_reply_to": {
+                                    event_id: storeEvent.MatrixId.split(";")[0]
+                                }
+                            };
+                        }
+                    }
+                }
                 if (editEventId) {
                     sendContent.body = `* ${result.body}`;
                     sendContent.formatted_body = `* ${result.formattedBody}`;
